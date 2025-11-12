@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# PM2
+.pm2/
+
+# 文档
+README.md
+SUPABASE_SETUP.md
+MIGRATION_SUMMARY.md
+TEST_BLOCK.md
+BLOCK_FEATURE_SUMMARY.md
+docs/
+
+# Docker 相关
+Dockerfile
+.dockerignore
+docker-compose.yml
