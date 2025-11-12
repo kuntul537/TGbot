@@ -26,11 +26,7 @@ class MessageHandler {
       const username = msg.from.username || msg.from.first_name || '未知用户';
       const text = msg.text;
 
-      logger.info('收到文本消息', {
-        userId,
-        username,
-        text: text.substring(0, 100)
-      });
+      logger.info(`📝 收到文本消息 | 用户: ${username} (${userId}) | 内容: ${text.substring(0, 50)}...`);
 
       // 如果是主人发送的消息，检查是否是回复消息
       if (userId === this.ownerId) {
@@ -38,14 +34,14 @@ class MessageHandler {
         if (msg.reply_to_message) {
           await this.handleOwnerReply(msg);
         } else {
-          logger.debug('主人发送的普通消息，跳过处理');
+          logger.debug(`👑 主人发送普通消息，跳过处理`);
         }
         return;
       }
 
       // 检查用户是否被拉黑
       if (await this.db.isUserBlocked(userId)) {
-        logger.info('拉黑用户尝试发送消息', { userId, username });
+        logger.warn(`🚫 拉黑用户尝试发送消息 | 用户: ${username} (${userId})`);
         await this.bot.sendMessage(
           chatId,
           '❌ 抱歉，您已被拉黑，无法发送消息。'
@@ -104,10 +100,7 @@ class MessageHandler {
       await this.forwardToOwner(msg, username);
 
     } catch (error) {
-      logger.error('处理文本消息失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 处理文本消息失败 | 错误: ${error.message}`, { stack: error.stack });
     }
   }
 
@@ -120,10 +113,7 @@ class MessageHandler {
       const userId = msg.from.id;
       const username = msg.from.username || msg.from.first_name || '未知用户';
 
-      logger.info('收到图片消息', {
-        userId,
-        username
-      });
+      logger.info(`📷 收到图片消息 | 用户: ${username} (${userId})`);
 
       // 如果是主人发送的消息，不处理
       if (userId === this.ownerId) {
@@ -131,14 +121,14 @@ class MessageHandler {
         if (msg.reply_to_message) {
           await this.handleOwnerReply(msg);
         } else {
-          logger.debug('主人发送的普通图片，跳过处理');
+          logger.debug(`👑 主人发送普通图片，跳过处理`);
         }
         return;
       }
 
       // 检查用户是否被拉黑
       if (await this.db.isUserBlocked(userId)) {
-        logger.info('拉黑用户尝试发送图片', { userId, username });
+        logger.warn(`🚫 拉黑用户尝试发送图片 | 用户: ${username} (${userId})`);
         await this.bot.sendMessage(
           chatId,
           '❌ 抱歉，您已被拉黑，无法发送消息。'
@@ -159,10 +149,7 @@ class MessageHandler {
       await this.forwardPhotoToOwner(msg, username);
 
     } catch (error) {
-      logger.error('处理图片消息失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 处理图片消息失败 | 错误: ${error.message}`, { stack: error.stack });
     }
   }
 
@@ -175,10 +162,7 @@ class MessageHandler {
       const userId = msg.from.id;
       const username = msg.from.username || msg.from.first_name || '未知用户';
 
-      logger.info('/start 命令', {
-        userId,
-        username
-      });
+      logger.info(`🚀 /start 命令 | 用户: ${username} (${userId})`);
 
       if (userId === this.ownerId) {
         // 主人的欢迎消息
@@ -226,10 +210,7 @@ class MessageHandler {
       }
 
     } catch (error) {
-      logger.error('处理 /start 命令失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 处理 /start 命令失败 | 错误: ${error.message}`, { stack: error.stack });
     }
   }
 
@@ -272,13 +253,10 @@ class MessageHandler {
         `⏰ 时间: ${new Date().toLocaleString('zh-CN')}`
       );
 
-      logger.info('验证码已发送给用户', { userId, username });
+      logger.info(`✅ 验证码已发送 | 用户: ${username} (${userId})`);
 
     } catch (error) {
-      logger.error('发送验证码失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 发送验证码失败 | 用户ID: ${userId} | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         chatId,
@@ -312,22 +290,15 @@ class MessageHandler {
       await this.db.saveMessageMapping(forwardedMsg.message_id, msg.from.id, username);
 
       // 向用户确认
-      await this.bot.sendMessage(
-        msg.chat.id,
-        '✅ 您的消息已成功发送！'
-      );
+      // await this.bot.sendMessage(
+      //   msg.chat.id,
+      //   '✅ 您的消息已成功发送！'
+      // );
 
-      logger.info('消息已转发给主人', {
-        userId: msg.from.id,
-        username,
-        forwardedMessageId: forwardedMsg.message_id
-      });
+      logger.info(`📤 消息已转发给主人 | 用户: ${username} (${msg.from.id}) | 转发消息ID: ${forwardedMsg.message_id}`);
 
     } catch (error) {
-      logger.error('转发消息失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 转发消息失败 | 用户ID: ${msg.from.id} | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         msg.chat.id,
@@ -366,17 +337,10 @@ class MessageHandler {
         '✅ 您的图片已成功发送！'
       );
 
-      logger.info('图片已转发给主人', {
-        userId: msg.from.id,
-        username,
-        forwardedMessageId: forwardedMsg.message_id
-      });
+      logger.info(`📤 图片已转发给主人 | 用户: ${username} (${msg.from.id}) | 转发消息ID: ${forwardedMsg.message_id}`);
 
     } catch (error) {
-      logger.error('转发图片失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 转发图片失败 | 用户ID: ${msg.from.id} | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         msg.chat.id,
@@ -392,29 +356,23 @@ class MessageHandler {
     try {
       const replyToMsgId = msg.reply_to_message.message_id;
       
-      // 添加调试日志
-      logger.info('处理主人回复', {
-        replyToMsgId,
-        hasText: !!msg.text,
-        text: msg.text,
-        textLower: msg.text ? msg.text.trim().toLowerCase() : null
-      });
+      logger.debug(`💬 处理主人回复 | 回复消息ID: ${replyToMsgId} | 内容类型: ${msg.text ? '文本' : msg.photo ? '图片' : '其他'}`);
       
       // 检查是否是拉黑命令
       if (msg.text && msg.text.trim().toLowerCase() === '/block') {
-        logger.info('检测到拉黑命令');
+        logger.info(`🚫 检测到拉黑命令`);
         await this.handleBlockUser(msg);
         return;
       }
 
       // 检查是否是解除拉黑命令
       if (msg.text && msg.text.trim().toLowerCase() === '/unblock') {
-        logger.info('检测到解除拉黑命令');
+        logger.info(`✅ 检测到解除拉黑命令`);
         await this.handleUnblockUser(msg);
         return;
       }
 
-      logger.info('处理正常回复消息');
+      logger.debug(`💬 处理正常回复消息`);
       
       // 从数据库查找原始用户ID
       const mapping = await this.db.getMessageMapping(replyToMsgId);
@@ -427,7 +385,7 @@ class MessageHandler {
           '• 这不是一条用户转发的消息\n\n' +
           '💡 提示：只能回复7天内转发的用户消息。'
         );
-        logger.warn('找不到消息映射', { replyToMsgId });
+        logger.warn(`⚠️ 找不到消息映射 | 回复消息ID: ${replyToMsgId}`);
         return;
       }
 
@@ -462,18 +420,10 @@ class MessageHandler {
         `✅ 回复已发送给用户 ${username} (ID: ${targetUserId})`
       );
 
-      logger.info('主人回复已发送', {
-        targetUserId,
-        username,
-        hasPhoto: !!msg.photo,
-        hasText: !!msg.text
-      });
+      logger.info(`✅ 主人回复已发送 | 目标用户: ${username} (${targetUserId}) | 类型: ${msg.photo ? '图片' : '文本'}`);
 
     } catch (error) {
-      logger.error('处理主人回复失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 处理主人回复失败 | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         this.ownerId,
@@ -514,17 +464,10 @@ class MessageHandler {
         `💡 如需解除拉黑，请回复该用户的消息并发送 /unblock`
       );
 
-      logger.info('用户已被拉黑', {
-        targetUserId,
-        username,
-        byOwner: this.ownerId
-      });
+      logger.info(`🚫 用户已被拉黑 | 用户: ${username} (${targetUserId}) | 操作者: 主人(${this.ownerId})`);
 
     } catch (error) {
-      logger.error('拉黑用户失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 拉黑用户失败 | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         this.ownerId,
@@ -569,16 +512,10 @@ class MessageHandler {
         `💡 如需解除拉黑，请发送 /unblock ${userId}`
       );
 
-      logger.info('用户已被拉黑（通过ID）', {
-        targetUserId: userId,
-        byOwner: this.ownerId
-      });
+      logger.info(`🚫 用户已被拉黑(通过ID) | 用户ID: ${userId} | 操作者: 主人(${this.ownerId})`);
 
     } catch (error) {
-      logger.error('拉黑用户失败（通过ID）', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 拉黑用户失败(通过ID) | 用户ID: ${targetUserId} | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         this.ownerId,
@@ -631,17 +568,10 @@ class MessageHandler {
         `验证失败记录已清除。`
       );
 
-      logger.info('用户已解除拉黑', {
-        targetUserId,
-        username,
-        byOwner: this.ownerId
-      });
+      logger.info(`✅ 用户已解除拉黑 | 用户: ${username} (${targetUserId}) | 操作者: 主人(${this.ownerId})`);
 
     } catch (error) {
-      logger.error('解除拉黑用户失败', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 解除拉黑用户失败 | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         this.ownerId,
@@ -680,16 +610,10 @@ class MessageHandler {
         `验证失败记录已清除。`
       );
 
-      logger.info('用户已解除拉黑（通过ID）', {
-        targetUserId: userId,
-        byOwner: this.ownerId
-      });
+      logger.info(`✅ 用户已解除拉黑(通过ID) | 用户ID: ${userId} | 操作者: 主人(${this.ownerId})`);
 
     } catch (error) {
-      logger.error('解除拉黑用户失败（通过ID）', {
-        error: error.message,
-        stack: error.stack
-      });
+      logger.error(`❌ 解除拉黑用户失败(通过ID) | 用户ID: ${targetUserId} | 错误: ${error.message}`, { stack: error.stack });
 
       await this.bot.sendMessage(
         this.ownerId,
@@ -702,10 +626,7 @@ class MessageHandler {
    * 处理错误
    */
   handleError(error) {
-    logger.error('Bot 错误', {
-      error: error.message,
-      stack: error.stack
-    });
+    logger.error(`❌ Bot 运行错误 | ${error.message}`, { stack: error.stack });
   }
 }
 

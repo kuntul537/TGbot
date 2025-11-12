@@ -70,10 +70,7 @@ class UserVerification {
     // 保存到数据库
     await this.db.savePendingVerification(userId, captcha.text);
 
-    logger.info('为用户生成验证码', {
-      userId,
-      code: captcha.text  // 在日志中记录验证码（仅用于调试）
-    });
+    logger.info(`🔐 生成验证码 | 用户ID: ${userId} | 验证码: ${captcha.text}`);
 
     return captcha.data;
   }
@@ -108,7 +105,7 @@ class UserVerification {
       // 自动拉黑该用户
       await this.db.blockUser(userId);
       
-      logger.warn('用户验证失败次数过多，已自动拉黑', { userId, username });
+      logger.warn(`🚫 验证失败次数过多，已自动拉黑 | 用户: ${username} (${userId})`);
       return {
         success: false,
         message: '验证失败次数过多，您已被禁止使用此机器人'
@@ -127,7 +124,7 @@ class UserVerification {
       // 移除待验证记录
       await this.db.deletePendingVerification(userId);
 
-      logger.info('用户验证成功', { userId, username });
+      logger.info(`✅ 验证成功 | 用户: ${username} (${userId})`);
 
       return {
         success: true,
@@ -137,7 +134,7 @@ class UserVerification {
       // 验证失败
       const remainingAttempts = this.maxAttempts - currentAttempts;
       
-      logger.info('用户验证失败', { userId, remainingAttempts });
+      logger.warn(`❌ 验证失败 | 用户ID: ${userId} | 剩余机会: ${remainingAttempts}`);
 
       return {
         success: false,
@@ -158,7 +155,7 @@ class UserVerification {
     // 清除待验证记录
     await this.db.deletePendingVerification(userId);
 
-    logger.info('用户已被手动验证', { userId, username });
+    logger.info(`👑 手动验证用户 | 用户: ${username} (${userId})`);
   }
 
   /**
@@ -168,7 +165,7 @@ class UserVerification {
   async removeVerification(userId) {
     // Supabase 不需要单独移除已验证用户
     await this.db.deletePendingVerification(userId);
-    logger.info('用户验证状态已移除', { userId });
+    logger.info(`🗑️ 移除验证状态 | 用户ID: ${userId}`);
   }
 
   /**

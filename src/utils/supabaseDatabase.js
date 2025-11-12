@@ -15,11 +15,11 @@ class SupabaseDatabase {
    */
   async initialize() {
     try {
-      logger.info('Supabase 数据库管理器初始化完成');
+      logger.info('✅ Supabase 数据库管理器初始化完成');
       this.initialized = true;
       return true;
     } catch (error) {
-      logger.error('数据库初始化失败:', error);
+      logger.error(`❌ 数据库初始化失败 | ${error.message}`, { stack: error.stack });
       throw error;
     }
   }
@@ -42,10 +42,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.debug('消息映射已保存', { forwardedMessageId, userId, username });
+      logger.debug(`💾 消息映射已保存 | 转发消息ID: ${forwardedMessageId} | 用户: ${username} (${userId})`);
       return true;
     } catch (error) {
-      logger.error('保存消息映射失败:', error);
+      logger.error(`❌ 保存消息映射失败 | ${error.message}`, { stack: error.stack });
       return false;
     }
   }
@@ -75,7 +75,7 @@ class SupabaseDatabase {
         createdAt: data.created_at
       };
     } catch (error) {
-      logger.error('获取消息映射失败:', error);
+      logger.error(`❌ 获取消息映射失败 | 消息ID: ${forwardedMessageId} | ${error.message}`);
       return null;
     }
   }
@@ -95,10 +95,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('已清理过期消息映射');
+      logger.info(`🧹 已清理过期消息映射 (7天前)`);
       return true;
     } catch (error) {
-      logger.error('清理过期消息映射失败:', error);
+      logger.error(`❌ 清理过期消息映射失败 | ${error.message}`);
       return false;
     }
   }
@@ -120,10 +120,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('用户验证状态已保存', { userId, username });
+      logger.info(`✅ 用户验证状态已保存 | 用户: ${username} (${userId})`);
       return true;
     } catch (error) {
-      logger.error('保存用户验证状态失败:', error);
+      logger.error(`❌ 保存用户验证状态失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -148,7 +148,7 @@ class SupabaseDatabase {
 
       return !!data;
     } catch (error) {
-      logger.error('检查用户验证状态失败:', error);
+      logger.error(`❌ 检查用户验证状态失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -175,10 +175,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.debug('待验证信息已保存', { userId });
+      logger.debug(`💾 待验证信息已保存 | 用户ID: ${userId}`);
       return true;
     } catch (error) {
-      logger.error('保存待验证信息失败:', error);
+      logger.error(`❌ 保存待验证信息失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -214,7 +214,7 @@ class SupabaseDatabase {
         expiresAt: data.expires_at
       };
     } catch (error) {
-      logger.error('获取待验证信息失败:', error);
+      logger.error(`❌ 获取待验证信息失败 | 用户ID: ${userId} | ${error.message}`);
       return null;
     }
   }
@@ -233,7 +233,7 @@ class SupabaseDatabase {
 
       return true;
     } catch (error) {
-      logger.error('删除待验证信息失败:', error);
+      logger.error(`❌ 删除待验证信息失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -257,7 +257,7 @@ class SupabaseDatabase {
 
       return newAttempts;
     } catch (error) {
-      logger.error('增加验证尝试次数失败:', error);
+      logger.error(`❌ 增加验证尝试次数失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -274,10 +274,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('已清理过期验证码');
+      logger.info(`🧹 已清理过期验证码`);
       return true;
     } catch (error) {
-      logger.error('清理过期验证码失败:', error);
+      logger.error(`❌ 清理过期验证码失败 | ${error.message}`);
       return false;
     }
   }
@@ -298,10 +298,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('用户已加入黑名单', userId);
+      logger.info(`🚫 用户已加入黑名单 | 用户ID: ${userId}`);
       return true;
     } catch (error) {
-      logger.error('拉黑用户失败:', error);
+      logger.error(`❌ 拉黑用户失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -318,10 +318,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('用户已从黑名单移除', userId);
+      logger.info(`✅ 用户已从黑名单移除 | 用户ID: ${userId}`);
       return true;
     } catch (error) {
-      logger.error('解除拉黑失败:', error);
+      logger.error(`❌ 解除拉黑失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -346,7 +346,7 @@ class SupabaseDatabase {
 
       return !!data;
     } catch (error) {
-      logger.error('检查用户黑名单状态失败:', error);
+      logger.error(`❌ 检查用户黑名单状态失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -364,7 +364,7 @@ class SupabaseDatabase {
 
       return count || 0;
     } catch (error) {
-      logger.error('获取黑名单用户数量失败:', error);
+      logger.error(`❌ 获取黑名单用户数量失败 | ${error.message}`);
       return 0;
     }
   }
@@ -385,10 +385,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('已记录验证失败', { userId, username, reason });
+      logger.warn(`⚠️ 已记录验证失败 | 用户: ${username} (${userId}) | 原因: ${reason}`);
       return true;
     } catch (error) {
-      logger.error('记录验证失败失败:', error);
+      logger.error(`❌ 记录验证失败失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -407,7 +407,7 @@ class SupabaseDatabase {
 
       return count || 0;
     } catch (error) {
-      logger.error('获取验证失败次数失败:', error);
+      logger.error(`❌ 获取验证失败次数失败 | 用户ID: ${userId} | ${error.message}`);
       return 0;
     }
   }
@@ -427,7 +427,7 @@ class SupabaseDatabase {
 
       return data && data.length > 0;
     } catch (error) {
-      logger.error('检查验证失败记录失败:', error);
+      logger.error(`❌ 检查验证失败记录失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -444,10 +444,10 @@ class SupabaseDatabase {
 
       if (error) throw error;
 
-      logger.info('已清除用户验证失败记录', { userId });
+      logger.info(`🧹 已清除用户验证失败记录 | 用户ID: ${userId}`);
       return true;
     } catch (error) {
-      logger.error('清除验证失败记录失败:', error);
+      logger.error(`❌ 清除验证失败记录失败 | 用户ID: ${userId} | ${error.message}`);
       return false;
     }
   }
@@ -485,7 +485,7 @@ class SupabaseDatabase {
         failedVerifications: failedCount || 0
       };
     } catch (error) {
-      logger.error('获取统计信息失败:', error);
+      logger.error(`❌ 获取统计信息失败 | ${error.message}`);
       return {
         verifiedUsers: 0,
         pendingVerifications: 0,
@@ -506,7 +506,7 @@ class SupabaseDatabase {
       await this.cleanupExpiredVerifications();
     }, 60 * 60 * 1000); // 1小时
 
-    logger.info('定期清理任务已启动');
+    logger.info('⏰ 定期清理任务已启动 (每小时执行一次)');
   }
 }
 
