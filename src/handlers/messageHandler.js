@@ -248,7 +248,7 @@ class MessageHandler {
       await this.bot.sendMessage(
         this.ownerId,
         `🆕 新用户开始验证\n\n` +
-        `� 用户: ${username}\n` +
+        `👥 用户: ${username}\n` +
         `🆔 ID: ${userId}\n` +
         `⏰ 时间: ${new Date().toLocaleString('zh-CN')}`
       );
@@ -271,13 +271,13 @@ class MessageHandler {
   async forwardToOwner(msg, username) {
     try {
       // 发送用户信息
-      const userInfo = `📨 新消息来自: ${username}\n` +
-                      `🆔 用户ID: ${msg.from.id}\n` +
-                      `⏰ 时间: ${new Date().toLocaleString('zh-CN')}\n` +
-                      `💡 回复此消息可直接回复用户\n` +
-                      `${'─'.repeat(30)}`;
+      // const userInfo = `📨 新消息来自: ${username}\n` +
+      //                 `🆔 用户ID: ${msg.from.id}\n` +
+      //                 `⏰ 时间: ${new Date().toLocaleString('zh-CN')}\n` +
+      //                 `💡 回复此消息可直接回复用户\n` +
+      //                 `${'─'.repeat(30)}`;
 
-      await this.bot.sendMessage(this.ownerId, userInfo);
+      // await this.bot.sendMessage(this.ownerId, userInfo);
 
       // 转发原始消息，并记录消息ID
       const forwardedMsg = await this.bot.forwardMessage(
@@ -313,13 +313,13 @@ class MessageHandler {
   async forwardPhotoToOwner(msg, username) {
     try {
       // 发送用户信息
-      const userInfo = `📷 新图片来自: ${username}\n` +
-                      `🆔 用户ID: ${msg.from.id}\n` +
-                      `⏰ 时间: ${new Date().toLocaleString('zh-CN')}\n` +
-                      `💡 回复此消息可直接回复用户\n` +
-                      `${'─'.repeat(30)}`;
+      // const userInfo = `📷 新图片来自: ${username}\n` +
+      //                 `🆔 用户ID: ${msg.from.id}\n` +
+      //                 `⏰ 时间: ${new Date().toLocaleString('zh-CN')}\n` +
+      //                 `💡 回复此消息可直接回复用户\n` +
+      //                 `${'─'.repeat(30)}`;
 
-      await this.bot.sendMessage(this.ownerId, userInfo);
+      // await this.bot.sendMessage(this.ownerId, userInfo);
 
       // 转发图片，并记录消息ID
       const forwardedMsg = await this.bot.forwardMessage(
@@ -381,9 +381,9 @@ class MessageHandler {
         await this.bot.sendMessage(
           this.ownerId,
           '❌ 无法找到要回复的用户。可能原因：\n' +
-          '• 消息映射已过期（超过7天）\n' +
-          '• 这不是一条用户转发的消息\n\n' +
-          '💡 提示：只能回复7天内转发的用户消息。'
+          '• 这不是一条用户转发的消息\n' +
+          '• 消息映射记录不存在\n\n' +
+          '💡 提示：只能回复用户转发过来的消息。'
         );
         logger.warn(`⚠️ 找不到消息映射 | 回复消息ID: ${replyToMsgId}`);
         return;
@@ -445,7 +445,7 @@ class MessageHandler {
       if (!mapping) {
         await this.bot.sendMessage(
           this.ownerId,
-          '❌ 无法找到要拉黑的用户，可能是消息映射已过期。'
+          '❌ 无法找到要拉黑的用户，消息映射记录不存在。'
         );
         return;
       }
@@ -537,7 +537,7 @@ class MessageHandler {
       if (!mapping) {
         await this.bot.sendMessage(
           this.ownerId,
-          '❌ 无法找到要解除拉黑的用户，可能是消息映射已过期。'
+          '❌ 无法找到要解除拉黑的用户，消息映射记录不存在。'
         );
         return;
       }

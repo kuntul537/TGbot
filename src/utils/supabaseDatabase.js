@@ -81,29 +81,6 @@ class SupabaseDatabase {
   }
 
   /**
-   * 删除过期的消息映射（7天前）
-   */
-  async cleanupOldMappings() {
-    try {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-      const { data, error } = await supabase
-        .from('message_mappings')
-        .delete()
-        .lt('created_at', sevenDaysAgo.toISOString());
-
-      if (error) throw error;
-
-      logger.info(`🧹 已清理过期消息映射 (7天前)`);
-      return true;
-    } catch (error) {
-      logger.error(`❌ 清理过期消息映射失败 | ${error.message}`);
-      return false;
-    }
-  }
-
-  /**
    * 保存已验证用户
    */
   async saveVerifiedUser(userId, username) {
@@ -500,13 +477,12 @@ class SupabaseDatabase {
    * 启动定期清理任务
    */
   startCleanupTask() {
-    // 每小时清理一次过期数据
+    // 每小时清理一次过期验证码
     setInterval(async () => {
-      await this.cleanupOldMappings();
       await this.cleanupExpiredVerifications();
     }, 60 * 60 * 1000); // 1小时
 
-    logger.info('⏰ 定期清理任务已启动 (每小时执行一次)');
+    logger.info('⏰ 定期清理任务已启动 (每小时清理过期验证码)');
   }
 }
 
